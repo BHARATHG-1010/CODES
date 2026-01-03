@@ -1,0 +1,146 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct BST {
+	int data;
+	struct BST *left;
+	struct BST *right;
+};
+
+typedef struct BST NODE;
+NODE *node;
+NODE *createTree(NODE *node,int data) {
+	if(node==NULL) {
+		NODE *temp=(NODE *)malloc(sizeof(NODE));
+		temp->data=data;
+		temp->left=temp->right=NULL;
+		return temp;
+	}
+
+	if(data<node->data) {
+		node->left=createTree(node->left,data);
+	} else if(data>node->data) {
+		node->right=createTree(node->right,data);
+	}
+	return node;
+}
+
+NODE *findMin(NODE *node) {
+	while(node->left!=NULL)
+		node=node->left;
+		return node;
+}
+
+void search(NODE *node,int data) {
+	if(node==NULL) {
+		printf("Element not found\n");
+		return;
+	} else if(data<node->data) {
+		search(node->left,data);
+	} else if(data>node->data) {
+		search(node->right,data);
+	} else {
+		printf("Element found: %d\n",node->data);
+	}
+}
+
+NODE *deleteNode(NODE *root,int key) {
+	if(root==NULL)
+		return root;
+
+	if(key<root->data) {
+		root->left=deleteNode(root->left,key);
+	} else if(key>root->data) {
+		root->right=deleteNode(root->right,key);
+	} else {
+		if(root->left==NULL) {
+			NODE *temp=root->right;
+			free(root);
+			return temp;
+		} else if(root->right==NULL) {
+			NODE *temp=root->left;
+			free(root);
+			return temp;
+		}
+		NODE *temp=findMin(root->right);
+		root->data=temp->data;
+		root->right=deleteNode(root->right,temp->data);
+	}
+	return root;
+}
+
+void inorder(NODE *node) {
+	if(node!=NULL) {
+		inorder(node->left);
+		printf("%d\t",node->data);
+		inorder(node->right);
+	}
+}
+
+void preorder(NODE *node) {
+	if(node!=NULL) {
+		printf("%d\t",node->data);
+		preorder(node->left);
+		preorder(node->right);
+	}
+}
+
+void postorder(NODE *node) {
+	if(node!=NULL) {
+		postorder(node->left);
+		postorder(node->right);
+		printf("%d\t",node->data);
+	}
+}
+
+void main() {
+	int data,ch,i,n,key;
+	NODE *root=NULL;
+
+	while(1) {
+		printf("\n---Main Menu---\n");
+		printf("1. Insert into BST\n2. Delete Element\n3. Search Element\n4. Inorder Traversal\n5. Preorder Traversal\n6. Postorder Traversal\n7. Exit");
+		printf("\nEnter your choice: ");
+		scanf("%d",&ch);
+
+		switch(ch) {
+			case 1:printf("Enter number of nodes: ");
+				scanf("%d",&n);
+				printf("Enter the elements values to create BST like(6,9,5,2,8,15,24,14,7,8,5,2):\n");
+				for(i=0;i<n;i++) {
+					scanf("%d",&data);
+					root=createTree(root,data);
+				}
+				break;
+				
+			case 2:printf("Enter element to delete: ");
+				scanf("%d",&key);
+				root=deleteNode(root,key);
+				printf("Element deleted (if existed)\n");
+				break;
+
+			case 3:printf("Enter element to search: ");
+				scanf("%d",&key);
+				search(root,key);
+				break;
+				
+			case 4:printf("Inorder Traversal:\n");
+				inorder(root);
+				printf("\n");
+				break;
+
+			case 5:printf("Preorder Traversal:\n");
+				preorder(root);
+				printf("\n");
+				break;
+
+			case 6:printf("Postorder Traversal:\n");
+				postorder(root);
+				printf("\n");
+				break;
+				
+			case 7:exit(0);
+			default:printf("Invalid choice\n");
+		}
+	}
+}

@@ -18,7 +18,7 @@ void main() {
 	int ch;
 
 	while(1) {
-		printf("---MAIN MENU---\n");
+		printf("\n---MAIN MENU---\n");
 		printf("1:Create\t2:Display\t3:Insert End");
 		printf("\n4:Delete Front\t5:Exit\n");
 		printf("Enter your choice: ");
@@ -53,7 +53,6 @@ void create() {
 		p->link=start;
 		start=p;
 	}
-	printf("\n");
 }
 
 void disp() {
@@ -72,7 +71,6 @@ void disp() {
 		t=t->link;
 	}
 	printf("Total number of nodes: %d\n",cnt);
-	printf("\n");
 }
 
 void insert_end() {
@@ -92,7 +90,6 @@ void insert_end() {
 	while(r->link!=null) 
 		r=r->link;
 		r->link=p;
-	printf("\n");
 }
 
 void del_front() {
@@ -104,7 +101,7 @@ void del_front() {
 	}
 
 	q=start;
-	printf("Deleted node is %s\n\n",q->usn);
+	printf("Deleted node is %s\n",q->usn);
 	start=start->link;
 	free(q);
 }

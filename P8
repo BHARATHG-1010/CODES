@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define null 0
+
+struct emp {
+char name[40],dept[40],desig[40]; 
+int ssn,sal;
+char phno[20];
+struct emp *llink;
+struct emp *rlink;
+};
+
+typedef struct emp node;
+node *start;
+
+void main() {
+void create(),insert_front(),del_front(),disp();
+int ch;
+
+	while(1) {
+		printf("\n---MAIN MENU---\n");
+		printf("1:Create\t2:Display\t3:Insert Front");
+		printf("\n4:Delete Front\t5:Exit\n");
+		printf("Enter your choice: ");
+		scanf("%d",&ch); 
+
+		switch(ch) {
+			case 1:create();
+				break;
+			case 2:disp();
+				break;
+			case 3:insert_front(); 
+				break;
+			case 4:del_front();
+				break; 
+			case 5:exit(0);
+			default:printf("Invalid choice.\n");
+		}
+	}
+}
+
+void create() {
+	node *p,*t; 
+	int i,n;
+
+	printf("Enter the number of employees: "); 
+	scanf("%d",&n);
+
+	printf("Enter the employee details[SSN,NAME,DEPT,DESIG,SAL AND PH.NO.]:\n");
+	for(i=0;i<n;i++) {
+		printf("Enter the Employee %d details:\n\t",i+1); 
+		p=(node*)malloc(sizeof(node));
+		p->rlink=null;
+		scanf("%d%s%s%s%d%s",&p->ssn,p->name,p->dept,p->desig,&p->sal,p->phno); 
+
+		if(start==null) {
+			start=p;
+			start->llink=null;
+		} else {	
+			t=start;
+			while(t->rlink!=null) 
+				t=t->rlink;
+				
+			t->rlink=p; 
+			p->llink=t;
+		}
+	}
+}
+
+void disp() {
+	node *r; 
+	if(start==null) {
+		printf("List is empty.\n");
+		return;
+	}
+	
+	r=start; 
+	while(r) {
+		printf("%d\t%s\t\t%s\t%s\t%d\t%s\n",r->ssn,r->name,r->dept,r->desig,r->sal,r->phno);
+		r=r->rlink;
+	}
+}
+
+void insert_front() {
+	node *p; 
+	p=(node*)malloc(sizeof(node)); 
+	
+	printf("Enter emp details:\n\t");
+	scanf("%d%s%s%s%d%s",&p->ssn,p->name,p->dept,p->desig,&p->sal,p->phno); 
+	
+	p->rlink=start;
+	start=p;
+	start->llink=null;
+}
+
+void del_front() {
+	node *q; 
+	if(start==null) {
+		printf("list is empty.\n");
+		return;
+	}
+
+	q=start;
+	printf("Deleted node is %d\n",q->ssn); 
+	start=start->rlink;
+	free(q);
+}
